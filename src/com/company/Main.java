@@ -16,17 +16,20 @@ public class Main {
     public static void main(String[] args){
 	    Path path= Path.of(args[0]+".json");
         Gson gson = new Gson();
-        JsonObject json=null;
+        JsonObject jsonObject=null;
+        JSON json=null;
         try {
-            json = gson.fromJson(Files.readString(path), JsonObject.class);
+            jsonObject = gson.fromJson(Files.readString(path), JsonObject.class);
+            json=new JSONFirstLevel(jsonObject);
         } catch (IOException e) {
             e.printStackTrace();
         }
         //System.out.println(json);
 
 
-        String html=wrapper(json);
+        String html=json.toHTML();
         //System.out.println(html);
+        System.out.println(html);
 
         FileWriter fileWriter = null;
         BufferedWriter bf = null;
@@ -145,6 +148,7 @@ public class Main {
                     break;
                 //any other json objects with "normal" html syntax like <title>Hello World v10</title>
                 default:
+                    JsonObject jsonObject=new JsonObject();
                     html  += jsonToHtml(key, json.get(key));
                     break;
             }
